@@ -27,7 +27,24 @@ const argv = require('yargs').options({
 //     .catch(err => console.log(err));
 
 
-const getInfoClima = () => {
+const getInfoClima = async(direccion) => {
+    console.log('************************');
+    console.log(`Consultar lugar de: ${direccion}`);
 
+    let lugarConsultado = await lugar.getLugarLatLng(direccion);
+    console.log(`Consultar clima`);
+
+    let climaConsultado = await clima.getClima(lugarConsultado.lat, lugarConsultado.lng);
+
+    if (climaConsultado) {
+        console.log(`El clima consultado de ${lugarConsultado.direccion} es ${climaConsultado}`);
+    } else {
+        throw new Error(`Error al obtener el clima de ${direccion}`);
+
+    }
 
 };
+
+getInfoClima(argv.direccion)
+    .then(console.log)
+    .catch(console.log);
